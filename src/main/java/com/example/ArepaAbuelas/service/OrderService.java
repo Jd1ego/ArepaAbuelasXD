@@ -55,16 +55,16 @@ public class OrderService {
 
         order.setItems(items);
 
-        double total = items.stream().mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity()).sum();
+        final double[] total = {items.stream().mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity()).sum()};
 
         // Apply coupon if valid
         if (couponCode != null) {
             couponService.applyCoupon(order.getUser(), couponCode).ifPresent(discount -> {
-                total -= total * discount;
+                total[0] -= total[0] * discount;
             });
         }
 
-        order.setTotal(total);
+        order.setTotal(total[0]);
         order = orderRepository.save(order);
         dto.setId(order.getId());
         dto.setDate(order.getDate());
