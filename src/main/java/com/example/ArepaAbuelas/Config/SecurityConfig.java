@@ -1,7 +1,10 @@
+// src/main/java/com/arepabuelas/config/SecurityConfig.java
 package com.example.ArepaAbuelas.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,46 +15,65 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // Enable CORS
-                .and()
-                .csrf().disable() // Disable CSRF for API (use JWT or other auth)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll() // Allow registration and login
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin-only endpoints
-                .requestMatchers("/api/products/**").authenticated() // User needs to be logged in for products
-                .requestMatchers("/api/orders/**").authenticated() // User orders
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic(); // Or use JWT if preferred, but basic for simplicity
+                // 1. CORS (activamos el bean de abajo)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 2. CSRF off → API REST sin cookies
+                .csrf(csrf -> csrf.disable())
+
+                // 3. Sin sesiones → cada request lleva credenciales
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // 4. Autorización por URL
+                .authorizeHttpRequests(auth -> auth
+                        // Registro y login → público
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // Solo ADMIN
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Productos: leer público, comentar solo usuarios autenticados
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/**/comments").authenticated()
+
+                        // Pedidos solo usuarios autenticados
+                        .requestMatchers("/api/orders/**").authenticated()
+
+                        // Todo lo demás → necesita login
+                        .anyRequest().authenticated()
+                )
+
+                // 5. Autenticación Basic (para pruebas). Cambia a JWT después.
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12); // fuerza 12 → más seguro
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Adjust for your frontend
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://127.0.0.1:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // cookies, Authorization header
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
