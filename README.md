@@ -1,4 +1,4 @@
 ﻿# ArepaAbuelasXD
 
-![Logo de Arepabuelas]([https://upload.wikimedia.org/wikipedia/commons/4/47/Markdown-mark.svg](https://preview.redd.it/el-amor-de-abuelas-v0-vqtdfedo00ne1.jpeg?auto=webp&s=0fc10e5120b55163c3702327a7223026c111757d))
+![Logo de Arepabuelas](https://preview.redd.it/el-amor-de-abuelas-v0-vqtdfedo00ne1.jpeg?width=640&crop=smart&auto=webp&s=899d74d6473a7b600c1ceb5eec9dedffed1c4bf7)
 
