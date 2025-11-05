@@ -1,9 +1,9 @@
 package com.example.ArepaAbuelas.service;
 
 
-import com.arepabuelas.dto.ProductDTO;
-import com.arepabuelas.entity.Product;
-import com.arepabuelas.repository.ProductRepository;
+import com.example.ArepaAbuelas.dto.ProductDTO;
+import com.example.ArepaAbuelas.entity.Product;
+import com.example.ArepaAbuelas.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

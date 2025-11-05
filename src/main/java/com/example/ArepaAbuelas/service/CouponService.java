@@ -1,8 +1,8 @@
 package com.example.ArepaAbuelas.service;
 
-import com.arepabuelas.entity.Coupon;
-import com.arepabuelas.entity.User;
-import com.arepabuelas.repository.CouponRepository;
+import com.example.ArepaAbuelas.entity.Coupon;
+import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.repository.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

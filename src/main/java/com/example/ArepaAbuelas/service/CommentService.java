@@ -1,12 +1,13 @@
 package com.example.ArepaAbuelas.service;
 
-import com.arepabuelas.dto.CommentDTO;
-import com.arepabuelas.entity.Comment;
-import com.arepabuelas.entity.Product;
-import com.arepabuelas.entity.User;
-import com.arepabuelas.repository.CommentRepository;
-import com.arepabuelas.repository.ProductRepository;
-import com.arepabuelas.repository.UserRepository;
+
+import com.example.ArepaAbuelas.dto.CommentDTO;
+import com.example.ArepaAbuelas.entity.Comment;
+import com.example.ArepaAbuelas.entity.Product;
+import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.repository.CommentRepository;
+import com.example.ArepaAbuelas.repository.ProductRepository;
+import com.example.ArepaAbuelas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

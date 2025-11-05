@@ -1,8 +1,8 @@
 package com.example.ArepaAbuelas.service;
 
-import com.arepabuelas.dto.UserDTO;
-import com.arepabuelas.entity.User;
-import com.arepabuelas.repository.UserRepository;
+import com.example.ArepaAbuelas.dto.UserDTO;
+import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

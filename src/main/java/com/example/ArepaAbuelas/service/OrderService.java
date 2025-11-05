@@ -1,13 +1,14 @@
 package com.example.ArepaAbuelas.service;
 
-import com.arepabuelas.dto.OrderDTO;
-import com.arepabuelas.entity.Order;
-import com.arepabuelas.entity.OrderItem;
-import com.arepabuelas.entity.Product;
-import com.arepabuelas.entity.User;
-import com.arepabuelas.repository.OrderRepository;
-import com.arepabuelas.repository.ProductRepository;
-import com.arepabuelas.repository.UserRepository;
+import com.example.ArepaAbuelas.dto.OrderDTO;
+import com.example.ArepaAbuelas.dto.OrderItemDTO;
+import com.example.ArepaAbuelas.entity.Order;
+import com.example.ArepaAbuelas.entity.OrderItem;
+import com.example.ArepaAbuelas.entity.Product;
+import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.repository.OrderRepository;
+import com.example.ArepaAbuelas.repository.ProductRepository;
+import com.example.ArepaAbuelas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
