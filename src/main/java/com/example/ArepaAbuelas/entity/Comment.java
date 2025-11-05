@@ -5,13 +5,17 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Coupon {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String code;
-    private double discount;
-    private boolean forNewUsersOnly = true;
+    private String text;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Product product;
 }
