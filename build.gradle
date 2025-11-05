@@ -27,6 +27,9 @@ dependencies {
 
 	// --- Base de datos ---
 	runtimeOnly 'org.postgresql:postgresql' // o usa 'mysql:mysql-connector-j' si prefieres MySQL
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.h2database:h2'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// --- Lombok ---
 	compileOnly 'org.projectlombok:lombok'

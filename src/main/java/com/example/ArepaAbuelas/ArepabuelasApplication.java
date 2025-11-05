@@ -28,7 +28,7 @@ public class ArepabuelasApplication {
 			PasswordEncoder encoder) {
 
 		return args -> {
-			// === ADMIN (listo para usar) ===
+
 			if (userRepo.findByEmail("admin@arepabuelas.com").isEmpty()) {
 				User admin = new User();
 				admin.setName("Camarón A-Panado");
@@ -41,7 +41,7 @@ public class ArepabuelasApplication {
 				System.out.println("ADMIN creado: admin@arepabuelas.com / arepa123");
 			}
 
-			// === 5 PRODUCTOS ===
+
 			if (productRepo.count() == 0) {
 				String[] nombres = {"Arepa de Queso", "Arepa de Chocolo", "Arepa con Hogao", "Arepa Reina Pepiada", "Arepa Paisa"};
 				for (int i = 0; i < 5; i++) {
@@ -55,7 +55,7 @@ public class ArepabuelasApplication {
 				System.out.println("5 arepas cargadas");
 			}
 
-			// === CUPÓN PARA NUEVOS USUARIOS ===
+
 			if (couponRepo.findByCode("AREPABUELAS10").isEmpty()) {
 				Coupon coupon = new Coupon();
 				coupon.setCode("AREPABUELAS10");

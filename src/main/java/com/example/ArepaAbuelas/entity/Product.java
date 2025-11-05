@@ -1,4 +1,4 @@
-// src/main/java/com/arepabuelas/entity/Product.java
+
 package com.example.ArepaAbuelas.entity;
 
 import jakarta.persistence.*;
