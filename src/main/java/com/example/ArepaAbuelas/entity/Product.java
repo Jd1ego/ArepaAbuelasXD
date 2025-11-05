@@ -1,35 +1,24 @@
+// src/main/java/com/arepabuelas/entity/Product.java
 package com.example.ArepaAbuelas.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Data;
+
 import java.util.List;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String title;
-
-    @NotBlank
-    @Column(length = 1000)
+    private String name;
     private String description;
+    private double price;
+    private String imageUrl; // Path to uploaded image
 
-    @Min(0)
-    private Long price;
-
-    private String imagePath;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CommentEntity> comments;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }

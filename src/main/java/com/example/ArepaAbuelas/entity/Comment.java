@@ -1,3 +1,4 @@
+// src/main/java/com/arepabuelas/entity/Comment.java
 package com.example.ArepaAbuelas.entity;
 
 import jakarta.persistence.*;

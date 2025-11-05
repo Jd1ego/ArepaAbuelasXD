@@ -1,26 +1,18 @@
+// src/main/java/com/arepabuelas/entity/Coupon.java
 package com.example.ArepaAbuelas.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Data;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "coupons")
 public class Coupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(unique = true)
     private String code;
-
-    private Integer percent;
-
-    private boolean used = false;
+    private double discount;
+    private boolean forNewUsersOnly = true;
 }
