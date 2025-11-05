@@ -1,12 +1,12 @@
 // src/main/java/com/arepabuelas/ArepabuelasApplication.java
 package com.example.ArepaAbuelas;
 
-import com.arepabuelas.entity.Coupon;
-import com.arepabuelas.entity.Product;
-import com.arepabuelas.entity.User;
-import com.arepabuelas.repository.CouponRepository;
-import com.arepabuelas.repository.ProductRepository;
-import com.arepabuelas.repository.UserRepository;
+import com.example.ArepaAbuelas.entity.Coupon;
+import com.example.ArepaAbuelas.entity.Product;
+import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.repository.CouponRepository;
+import com.example.ArepaAbuelas.repository.ProductRepository;
+import com.example.ArepaAbuelas.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -47,7 +47,7 @@ public class ArepabuelasApplication {
 				for (int i = 0; i < 5; i++) {
 					Product p = new Product();
 					p.setName(nombres[i]);
-					p.setDescription("La arepa más rica de Ventaquemada, hecha por las abuelas ❤️");
+					p.setDescription("La arepa más rica de Ventaquemada, hecha por las abuelas");
 					p.setPrice(8000 + i * 2000);
 					p.setImageUrl("/uploads/arepa" + (i + 1) + ".jpg");
 					productRepo.save(p);

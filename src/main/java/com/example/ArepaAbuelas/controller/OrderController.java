@@ -1,9 +1,9 @@
 package com.example.ArepaAbuelas.controller;
 // src/main/java/com/arepabuelas/controller/OrderController.java
-package com.arepabuelas.controller;
 
-import com.arepabuelas.dto.OrderDTO;
-import com.arepabuelas.service.OrderService;
+
+import com.example.ArepaAbuelas.dto.OrderDTO;
+import com.example.ArepaAbuelas.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

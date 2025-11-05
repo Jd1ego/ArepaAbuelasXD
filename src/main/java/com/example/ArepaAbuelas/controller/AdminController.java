@@ -1,9 +1,9 @@
 package com.example.ArepaAbuelas.controller;
 
-import com.arepabuelas.dto.ProductDTO;
-import com.arepabuelas.dto.UserDTO;
-import com.arepabuelas.service.ProductService;
-import com.arepabuelas.service.UserService;
+import com.example.ArepaAbuelas.dto.ProductDTO;
+import com.example.ArepaAbuelas.dto.UserDTO;
+import com.example.ArepaAbuelas.service.ProductService;
+import com.example.ArepaAbuelas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
