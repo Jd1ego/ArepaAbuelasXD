@@ -1,23 +1,35 @@
 package com.example.ArepaAbuelas.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import java.util.List;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private double price;
-    private String imageUrl; // Path to uploaded image
+    @NotBlank
+    private String title;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @NotBlank
+    @Column(length = 1000)
+    private String description;
+
+    @Min(0)
+    private Long price;
+
+    private String imagePath;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CommentEntity> comments;
 }
