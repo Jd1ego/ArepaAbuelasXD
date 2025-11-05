@@ -1,6 +1,7 @@
 package com.example.ArepaAbuelas.repository;
 
-import com.arepabuelas.entity.Order;
+
+import com.example.ArepaAbuelas.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
