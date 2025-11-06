@@ -29,8 +29,12 @@ public class UserService {
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole("USER");
-        user.setApproved(false);
+
+        // ✨ CORREGIDO -> ahora guardamos el rol con el prefijo obligatorio
+        user.setRole("ROLE_USER");
+
+        // Auto-approve on register to allow immediate JWT access (change if you want moderation)
+        user.setApproved(true);
 
         if (photo != null) {
             String fileName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
@@ -39,8 +43,10 @@ public class UserService {
         }
 
         user = userRepository.save(user);
+
         dto.setId(user.getId());
-        dto.setPassword(null); // Don't return password
+        dto.setPassword(null);
+        dto.setRole(user.getRole());
         dto.setPhotoUrl(user.getPhotoUrl());
         return dto;
     }
@@ -49,13 +55,18 @@ public class UserService {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isPresent()) {
             User user = optUser.get();
+
             if (passwordEncoder.matches(password, user.getPassword()) && user.isApproved()) {
+
                 UserDTO dto = new UserDTO();
                 dto.setId(user.getId());
                 dto.setName(user.getName());
                 dto.setEmail(user.getEmail());
                 dto.setPhotoUrl(user.getPhotoUrl());
+
+                // ✨ CORREGIDO -> devolvemos el rol con formato ROLE_*
                 dto.setRole(user.getRole());
+
                 return dto;
             }
         }
