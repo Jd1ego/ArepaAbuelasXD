@@ -6,9 +6,11 @@ import com.example.ArepaAbuelas.entity.Order;
 import com.example.ArepaAbuelas.entity.OrderItem;
 import com.example.ArepaAbuelas.entity.Product;
 import com.example.ArepaAbuelas.entity.User;
+import com.example.ArepaAbuelas.entity.Card;
 import com.example.ArepaAbuelas.repository.OrderRepository;
 import com.example.ArepaAbuelas.repository.ProductRepository;
 import com.example.ArepaAbuelas.repository.UserRepository;
+import com.example.ArepaAbuelas.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,19 +34,32 @@ public class OrderService {
     @Autowired
     private CouponService couponService;
 
+    @Autowired
+    private CardRepository cardRepository;
+
     public OrderDTO createOrder(OrderDTO dto, String couponCode) {
         Order order = new Order();
+
         Optional<User> user = userRepository.findById(dto.getUserId());
-        if (user.isEmpty()) return null;
+        if (user.isEmpty()) {
+            throw new RuntimeException("User not found with ID: " + dto.getUserId());
+        }
 
         order.setUser(user.get());
         order.setDate(LocalDateTime.now());
 
-        // Simulate card storage (DO NOT USE REAL DATA)
-        order.setCardNumber(dto.getCardNumber()); // In real: encrypt
-        order.setExpiry(dto.getExpiry());
-        order.setCvv(dto.getCvv());
+        // ✅ Tarjeta simulada — se usa el número cifrado ya guardado
+        // Se busca la tarjeta por los 4 últimos dígitos, o simplemente se toma el número del DTO para simular pago
+        Card card = cardRepository.findByUserId(user.get().getId())
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No saved card found for this user."));
 
+        order.setCardNumber(card.getCardNumberEncrypted() != null ? card.getCardNumberEncrypted() : dto.getCardNumber());
+        order.setExpiry(card.getExpiry());
+        order.setCvv(card.getCvvEncrypted() != null ? card.getCvvEncrypted() : dto.getCvv());
+
+        // 🛒 Procesar ítems
         List<OrderItem> items = dto.getItems().stream().map(itemDto -> {
             OrderItem item = new OrderItem();
             Optional<Product> product = productRepository.findById(itemDto.getProductId());
@@ -55,20 +70,33 @@ public class OrderService {
 
         order.setItems(items);
 
-        final double[] total = {items.stream().mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity()).sum()};
+        // 💰 Calcular total
+        final double[] total = {items.stream()
+                .mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity())
+                .sum()};
 
-        // Apply coupon if valid
-        if (couponCode != null) {
+        // 🎟️ Aplicar cupón si existe
+        if (couponCode != null && !couponCode.isBlank()) {
             couponService.applyCoupon(order.getUser(), couponCode).ifPresent(discount -> {
                 total[0] -= total[0] * discount;
             });
         }
 
         order.setTotal(total[0]);
+
+        // 💾 Guardar orden
         order = orderRepository.save(order);
+
+        // 📦 Retornar DTO
         dto.setId(order.getId());
         dto.setDate(order.getDate());
         dto.setTotal(order.getTotal());
+
+        // Por seguridad, no devolvemos datos de tarjeta
+        dto.setCardNumber(null);
+        dto.setCvv(null);
+        dto.setExpiry(card.getExpiry());
+
         return dto;
     }
 
@@ -79,13 +107,19 @@ public class OrderService {
             dto.setUserId(o.getUser().getId());
             dto.setDate(o.getDate());
             dto.setTotal(o.getTotal());
-            // Omit card details for security
+
+            // No incluir datos de tarjeta
+            dto.setCardNumber(null);
+            dto.setCvv(null);
+            dto.setExpiry(null);
+
             dto.setItems(o.getItems().stream().map(i -> {
                 OrderItemDTO itemDto = new OrderItemDTO();
                 itemDto.setProductId(i.getProduct().getId());
                 itemDto.setQuantity(i.getQuantity());
                 return itemDto;
             }).collect(Collectors.toList()));
+
             return dto;
         }).collect(Collectors.toList());
     }

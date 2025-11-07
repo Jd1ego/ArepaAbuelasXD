@@ -30,15 +30,18 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // ✨ CORREGIDO -> ahora guardamos el rol con el prefijo obligatorio
+        // Asigna rol por defecto
         user.setRole("ROLE_USER");
 
-        // Auto-approve on register to allow immediate JWT access (change if you want moderation)
+        // Auto aprobar el usuario (puedes cambiar a false si solo el admin debe aprobar)
         user.setApproved(true);
 
-        if (photo != null) {
+        // Guardar foto si se adjunta
+        if (photo != null && !photo.isEmpty()) {
             String fileName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
-            photo.transferTo(new File("uploads/" + fileName));
+            File uploadDir = new File("uploads");
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+            photo.transferTo(new File(uploadDir, fileName));
             user.setPhotoUrl("/uploads/" + fileName);
         }
 
@@ -55,18 +58,13 @@ public class UserService {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isPresent()) {
             User user = optUser.get();
-
             if (passwordEncoder.matches(password, user.getPassword()) && user.isApproved()) {
-
                 UserDTO dto = new UserDTO();
                 dto.setId(user.getId());
                 dto.setName(user.getName());
                 dto.setEmail(user.getEmail());
                 dto.setPhotoUrl(user.getPhotoUrl());
-
-                // ✨ CORREGIDO -> devolvemos el rol con formato ROLE_*
                 dto.setRole(user.getRole());
-
                 return dto;
             }
         }
@@ -83,7 +81,8 @@ public class UserService {
                     dto.setEmail(u.getEmail());
                     dto.setPhotoUrl(u.getPhotoUrl());
                     return dto;
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
     public void approveUser(Long id) {
@@ -92,5 +91,10 @@ public class UserService {
             user.setApproved(true);
             userRepository.save(user);
         });
+    }
+
+    // ✅ MÉTODO AÑADIDO: usado en CardController
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
