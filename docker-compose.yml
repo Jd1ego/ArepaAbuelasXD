@@ -7,12 +7,37 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin123
       POSTGRES_DB: arepabuelasdb
+    secrets:
+      - pg_password
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    command: ["postgres", "-c", "password_file=/run/secrets/pg_password"]
+
+  app:
+    build: .
+    container_name: arepabuelas-app
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://arepabuelas-db:5432/arepabuelasdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/pg_password
+      APP_AES_KEY_FILE: /run/secrets/aes_key
+    depends_on:
+      - postgres
+    secrets:
+      - pg_password
+      - aes_key
+    ports:
+      - "8080:8080"
 
 volumes:
   pgdata:
+
+secrets:
+  pg_password:
+    external: true
+  aes_key:
+    external: true
