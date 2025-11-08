@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/admin")
 public class AdminController {
 

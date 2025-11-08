@@ -2,42 +2,27 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:15
+    image: jsebas656/postgres-arepabuelas:latest
     container_name: arepabuelas-db
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: arepabuelasdb
-    secrets:
-      - pg_password
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    command: ["postgres", "-c", "password_file=/run/secrets/pg_password"]
+      - postgres_data:/var/lib/postgresql/data
 
-  app:
-    build: .
-    container_name: arepabuelas-app
+  backend:
+    image: jsebas656/arepabuelas-backend:latest
+    container_name: arepas-backend
     restart: always
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://arepabuelas-db:5432/arepabuelasdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/pg_password
-      APP_AES_KEY_FILE: /run/secrets/aes_key
     depends_on:
       - postgres
-    secrets:
-      - pg_password
-      - aes_key
     ports:
       - "8080:8080"
+    environment:
+      DB_URL: "jdbc:postgresql://postgres:5432/arepabuelasdb"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "Elden_Bloodborne2PC_Souls2"
+      APP_AES_KEY: "1234567890123456"
 
 volumes:
-  pgdata:
-
-secrets:
-  pg_password:
-    external: true
-  aes_key:
-    external: true
+  postgres_data:

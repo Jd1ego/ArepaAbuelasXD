@@ -86,15 +86,15 @@ public class OrderService {
         }
         order.setTotal(total[0]);
 
-        // 7️⃣ Guardar orden
+
         order = orderRepository.save(order);
 
-        // 8️⃣ Construir DTO de respuesta
+
         dto.setId(order.getId());
         dto.setDate(order.getDate());
         dto.setTotal(order.getTotal());
 
-        // No devolvemos datos sensibles de tarjeta
+
         dto.setCardNumber(null);
         dto.setCvv(null);
         dto.setExpiry(card.getExpiry());

@@ -1,7 +1,7 @@
 package com.example.ArepaAbuelas.controller;
 
 import com.example.ArepaAbuelas.dto.CardDTO;
-import com.example.ArepaAbuelas.dto.CardDTO;
+
 import com.example.ArepaAbuelas.entity.Card;
 import com.example.ArepaAbuelas.entity.User;
 import com.example.ArepaAbuelas.service.CardService;
@@ -24,7 +24,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<?> saveCard(@RequestBody CardDTO req) {
-        // basic validation
+
         if (req.getCardNumber() == null || req.getCardNumber().length() < 12) {
             return ResponseEntity.badRequest().body("Invalid card number");
         }
@@ -37,7 +37,7 @@ public class CardController {
         if (u == null) return ResponseEntity.status(401).body("Not authenticated");
 
         Card saved = cardService.saveCard(u.getId(), req.getCardNumber(), req.getCardHolder(), req.getExpiry(), req.getCvv());
-        // return only non-sensitive info
+
         return ResponseEntity.ok(new CardSummary(saved.getId(), saved.getLast4(), saved.getCardHolder(), saved.getExpiry()));
     }
 
@@ -54,6 +54,6 @@ public class CardController {
         return ResponseEntity.ok(out);
     }
 
-    // DTO used only inside controller response
+
     public static record CardSummary(Long id, String last4, String cardHolder, String expiry) {}
 }

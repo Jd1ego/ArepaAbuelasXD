@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor("MiSecretoSuperLargoParaJWT_UsaVariableEntorno".getBytes());
-    private final long EXPIRATION_MS = 1000 * 60 * 60 * 6; // 6 horas
+    private final long EXPIRATION_MS = 1000 * 60 * 60 * 6;
 
     public String generateToken(String username, String role, boolean approved) {
         return Jwts.builder()
